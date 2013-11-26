@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+   <head>
+      <title>Australia</title>
+      <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+      <meta charset="utf-8">
+      <style>
+        html, body, #map-canvas {
+           height: 100%;
+           margin: 0px;
+           padding: 0px
+        }
+      </style>
+      <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+      <script>
+         var map;
+
+	function initialize(){
+	    var mapOptions = {
+		zoom: 4,
+		center: new google.maps.LatLng (-30, 130),
+		//mapTypeId: google.maps.MapTypeId.ROAD
+	    };
+	    map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions);
+	    google.maps.event.addListener(map, 'click', function(pos){
+		createMarker(pos.latLng);
+	    });   
+	}
+
+	function createMarker(pos){
+	    var markerOptions = {
+		position: pos
+	    };
+	    var marker = new google.maps.Marker(markerOptions);
+	    marker.setMap(map);
+	    
+	    google.maps.event.addListener(marker, 'click', function(){
+		map.setZoom(map.getZoom()+1);
+		map.setCenter(marker.getPosition());
+	    });
+	}
+	google.maps.event.addDomListener(window, 'load', initialize);       
+      </script>
+      
+   </head>
+
+   <body>
+      <div id="map-canvas"></div>
+   </body>
+</html>

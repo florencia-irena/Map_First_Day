@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
+    <meta charset="utf-8">
+    <style>
+      html, body, #map-canvas {
+        height: 100%;
+        margin: 0px;
+        padding: 0px
+      }
+    </style>
+    <script src="https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false"></script>
+    <script>
+    var map;
+    var path=[];
+    var polygonOptions = {
+        paths: path
+    };
+    var polygon;
+    var markers=[];
+
+    function initialize(){
+	    var mapOptions = {
+		zoom: 4,
+		center: new google.maps.LatLng (-30, 130),
+		mapTypeId: google.maps.MapTypeId.ROAD
+	    };
+	   
+        map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions); 
+       
+        polygon = new google.maps.Polygon(polygonOptions);
+       
+         polygon.setMap(map);
+     
+        document.getElementById("button").addEventListener('click', function(){
+            polygon.setMap(null);
+            clearMarkers();
+            path = [];
+            polygon.setPath(path);
+            polygon.setOptions({fillColor: "#888888"});      
+            polygon.setMap(map);
+        });
+       
+        google.maps.event.addListener(map, 'click', function(pos){
+	    createMarker(pos.latLng);
+	});
+         
+
+       
+    }
+    function clearMarkers(){
+       for (var i = 0; i<markers.length;i++){
+          markers[i].setMap(null);
+       }
+       markers = [];
+    }
+    function createMarker(pos){
+	var markerOptions = {
+            position: pos
+	};
+        path.push(pos);
+        polygon.setPath(path);
+	var marker = new google.maps.Marker(markerOptions);
+	marker.setMap(map);
+        markers.push(marker);
+        google.maps.event.addListener(marker, 'click', function(){
+           alert ("Hey, you click the previous marker!");
+           polygon.setOptions({fillColor:"#FF0000"});
+        });
+	   
+    }
+  </script>
+  </head>
+  <body onload="initialize()">
+     <div> <p> You can create a closed path by clicking anywhere on the map.
+           <br> The point you created will be the corners of the path </p>
+           <p> If you accidentaly created a path by clicking on the same marker, <br>
+               we would remind you with an alert and unfortunately your path is now
+               alarmed and broken... That's why it turns red... </p>
+     </div>
+     <input type="button" id="button" value="Delete the path">
+     <div id="map-canvas"></div>
+  </body>
+</html>
+       

@@ -21,17 +21,17 @@
     var markers=[];
 
     function initialize(){
-	    var mapOptions = {
-		zoom: 4,
-		center: new google.maps.LatLng (-30, 130),
-		mapTypeId: google.maps.MapTypeId.ROAD
-	    };
+	var mapOptions = {
+            zoom: 4,
+            center: new google.maps.LatLng (-30, 130),
+	    mapTypeId: google.maps.MapTypeId.ROAD
+	};
 	   
         map = new google.maps.Map(document.getElementById("map-canvas"),mapOptions); 
        
         polygon = new google.maps.Polygon(polygonOptions);
        
-         polygon.setMap(map);
+        polygon.setMap(map);
      
         document.getElementById("button").addEventListener('click', function(){
             polygon.setMap(null);
@@ -49,12 +49,14 @@
 
        
     }
+
     function clearMarkers(){
        for (var i = 0; i<markers.length;i++){
           markers[i].setMap(null);
        }
        markers = [];
     }
+
     function createMarker(pos){
 	var markerOptions = {
             position: pos
